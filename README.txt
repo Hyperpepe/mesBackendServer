@@ -1,0 +1,4 @@
+需要配置文件路径的文件：
+startListenApi
+CheckStatus
+SendMessageToAll
