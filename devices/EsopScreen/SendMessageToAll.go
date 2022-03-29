@@ -5,6 +5,7 @@ import (
 	"first/SQL"
 	Client "first/tcp_Client"
 	"log"
+	"sync"
 )
 
 //定义从数据库取数据的类型
@@ -47,11 +48,18 @@ func SendMessageToAll() bool {
 	}
 	//读取到信息则通过tcp传递信息
 	esopPort := (*conf)["esop_port"]
+	var wg sync.WaitGroup
 	for _, row := range rowsData {
-		//fmt.Println("Now send to device ",i,row.Ip+":10000","Pic:"+row.Image)
-		log.Println(row.Ip + esopPort)
-		log.Println("Pic:" + row.Image)
-		go Client.SendMessage(row.Ip+esopPort, "Pic:"+row.Image)
+		ip := row.Ip
+		image := row.Image
+		wg.Add(1)
+		go sendToEsop(ip+esopPort, "Pic:"+"ftp://ftp@192.168.2.46/home/ftp/mes/"+image, &wg)
 	}
+	wg.Wait()
 	return true
+}
+func sendToEsop(Ip string, Message string, wg *sync.WaitGroup) {
+	log.Println(Ip + " " + Message)
+	Client.SendMessage(Ip, Message)
+	defer wg.Done()
 }

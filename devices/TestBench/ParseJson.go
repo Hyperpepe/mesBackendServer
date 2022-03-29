@@ -1,5 +1,0 @@
-package TestBench
-
-func ParseJson() {
-
-}
