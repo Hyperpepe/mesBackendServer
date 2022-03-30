@@ -9,7 +9,7 @@ import (
 )
 
 func ConnSQL() *sql.DB {
-	configAddr := "C:/Users/tss05/goProject/first/config.conf"
+	configAddr := "C:\\Users\\tss05\\goProject\\first\\config.conf"
 	conf, err := config.NewConfig("ini", configAddr)
 	if err != nil {
 		log.Print("config read error!")

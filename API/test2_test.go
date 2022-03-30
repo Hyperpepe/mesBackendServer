@@ -9,7 +9,7 @@ import (
 
 //测试程序
 func Test2(t *testing.T) {
-	startApiListen()
+	StartApiListen("192.168.2.25:11000")
 	Server.StartListen("192.168.2.25:10000")
 	log.Println("------------------------------------------------------------")
 	//EsopScreen.SendMessageToAll()

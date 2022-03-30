@@ -28,7 +28,7 @@ func SendMessage(ipAddr, Message string) string {
 	err = conn.SetReadDeadline(time.Now().Add(connTimeout))
 	n, err := conn.Read(buf[:])
 	if err != nil {
-		return "获取返回值超时"
+		return string(ipAddr) + ": 获取返回值超时"
 	}
 	log.Print(ipAddr + " : " + string(buf[:n]))
 	//发送图片正常时返回值为ok

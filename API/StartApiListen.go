@@ -1,17 +1,16 @@
 package API
 
 import (
-	"first/ReadConfig"
 	"first/devices/EsopScreen"
 	"log"
 	"net/http"
 )
 
-func startApiListen() {
+func StartApiListen(ApiIp string) {
 	//读取配置文件
-	conf := ReadConfig.ReadConfig()
+	//conf := ReadConfig.ReadConfig()
 	//读取配置文件中的监听端口
-	ApiIp := (*conf)["API_ListenAddr"]
+	//ApiIp = (*conf)["API_ListenAddr"]
 	log.Println(ApiIp)
 	//开始监听端口
 	go func() {
@@ -43,13 +42,25 @@ func handler(w http.ResponseWriter, r *http.Request) {
 				if !err {
 					_, err := w.Write([]byte("failed"))
 					if err != nil {
-						log.Print("调用图片显示错误 ")
+						log.Print("调用图片显示错误")
 					}
 				} else {
 					_, _ = w.Write([]byte("ok"))
 					//log.Println("2.API写入返回值成功")
 				}
 			}()
+		case "检查esop状态":
+			EsopScreen.CheckStatues()
+			//sta, err := json.Marshal(status)
+			//log.Println(sta)
+			//if err != nil {
+			//	log.Println("状态值转json失败", err)
+			//	return
+			//}
+			//w.Header().Set("Content-Type", "application/json")
+			//_,err  = w.Write(sta)
+			//if err != nil {
+			//	log.Print("返回esop状态值到mes主机错误")}
 		default:
 			log.Println("API找不到调用的指令!,接收参数: ", getArgs)
 		}
