@@ -8,7 +8,7 @@ import (
 
 //根据ip地址监听相关信息
 func StartListen(ipAddr string) {
-	fmt.Println("Starting the server ...")
+	log.Println("Start listening Tcp/Ip from " + ipAddr + "  ...")
 	// 创建 listener
 	//go func() {
 	//	listener, err := net.Listen("tcp", ipAddr)

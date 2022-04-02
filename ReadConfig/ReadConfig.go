@@ -8,6 +8,7 @@ import (
 func ReadConfig() *map[string]string {
 	//var ret map[string]string
 	conf, err := config.NewConfig("ini", "C:\\Users\\tss05\\goProject\\first\\config.conf")
+	//conf, err := config.NewConfig("ini", "config.conf")
 	if err != nil {
 		log.Print("config read error!")
 		log.Println(err)
