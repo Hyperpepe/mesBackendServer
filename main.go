@@ -6,7 +6,7 @@ import (
 )
 
 func main() {
-	API.StartApiListen("192.168.2.46:11000")
-	Server.StartListen("192.168.2.46:10000")
+	API.StartApiListen("172.20.10.2:11000")
+	Server.StartListen("172.20.10.2:10000")
 	//log.Println("------------------------------------------------------------")
 }

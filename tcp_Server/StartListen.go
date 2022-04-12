@@ -1,6 +1,7 @@
 package Server
 
 import (
+	"first/devices/TestBench"
 	"fmt"
 	"log"
 	"net"
@@ -33,11 +34,14 @@ func StartListen(ipAddr string) {
 	// 监听并接受来自客户端的连接
 	for {
 		conn, err := listener.Accept()
+		defer conn.Close()
 		if err != nil {
 			log.Println("Error accepting", err.Error())
 		}
 		message := doServerStuff(conn)
+		ret := TestBench.TestBenchFuncManage(message)
 		log.Println(message)
+		_, _ = conn.Write([]byte(ret))
 	}
 }
 
