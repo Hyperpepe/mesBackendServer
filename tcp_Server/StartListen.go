@@ -39,8 +39,8 @@ func StartListen(ipAddr string) {
 			log.Println("Error accepting", err.Error())
 		}
 		message := doServerStuff(conn)
+		//log.Println(message)
 		ret := TestBench.TestBenchFuncManage(message)
-		log.Println(message)
 		_, _ = conn.Write([]byte(ret))
 	}
 }

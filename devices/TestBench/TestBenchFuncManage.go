@@ -3,10 +3,14 @@ package TestBench
 import "first/devices/TestBench/SafetyTest"
 
 func TestBenchFuncManage(TcpMessages string) string {
-	messMap := convert(TcpMessages)
+	//根据传递来的MAP选择需要调用的FUNCTION
+	messMap := Convert(TcpMessages)
 	switch (*messMap)["ItemName"] {
 	case "Safety_test":
-		SafetyTest.SafetyTestFunc(*messMap)
+		err := SafetyTest.SafetyTestFunc(*messMap)
+		if err != nil {
+			return "fail"
+		}
 		return "ok"
 	default:
 		return "fail"

@@ -7,8 +7,8 @@ import (
 
 func ReadConfig() *map[string]string {
 	//var ret map[string]string
-	conf, err := config.NewConfig("ini", "C:\\Users\\tss05\\goProject\\first\\config.conf")
-	//conf, err := config.NewConfig("ini", "config.conf")
+	//conf, err := config.NewConfig("ini", "C:\\Users\\tss05\\goProject\\first\\config.conf")
+	conf, err := config.NewConfig("ini", "config.conf")
 	if err != nil {
 		log.Print("config read error!")
 		log.Println(err)
@@ -19,5 +19,6 @@ func ReadConfig() *map[string]string {
 		"sql_pass":       conf.String("sql_pass"),
 		"sql_database":   conf.String("sql_database"),
 		"esop_port":      conf.String("esop_port"),
-		"API_ListenAddr": conf.String("API_ListenAddr")}
+		"API_ListenAddr": conf.String("API_ListenAddr"),
+		"TCP_ListenAddr": conf.String("TCP_ListenAddr")}
 }

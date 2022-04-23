@@ -4,7 +4,8 @@ import (
 	"strings"
 )
 
-func convert(str string) *map[string]string {
+func Convert(str string) *map[string]string {
+	//将接受到的字符串转化为MAP
 	messages := strings.Split(str, "--")
 	var ret map[string]string
 	ret = make(map[string]string)
