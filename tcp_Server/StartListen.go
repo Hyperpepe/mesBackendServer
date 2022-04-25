@@ -41,7 +41,10 @@ func StartListen(ipAddr string) {
 		message := doServerStuff(conn)
 		//log.Println(message)
 		ret := TestBench.TestBenchFuncManage(message)
-		_, _ = conn.Write([]byte(ret))
+		_, err = conn.Write([]byte(ret))
+		if err != nil {
+			log.Printf("写入返回值时的连接错误！")
+		}
 	}
 }
 

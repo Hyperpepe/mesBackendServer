@@ -19,7 +19,7 @@ func TestConnect(t *testing.T) {
 	//	log.Println("ok!")
 	//}
 	//=========================================
-	CheckStatues()
+	//CheckStatues()
 	//Ip := "192.168.80.4:10001"
 	//Server.GetConnection(Ip)
 	//Client.SendMessage("192.168.2.25:10000", "h123")
