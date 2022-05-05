@@ -1,4 +1,2 @@
-需要配置文件路径的文件：
-startListenApi
-CheckStatus
-SendMessageToAll
+项目使用config配置相关的SQL连接与接口信息
+通过ReadConfig做读取config配置文件，需要对其中的路径做修改
