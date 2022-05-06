@@ -18,11 +18,10 @@ func SafetyTestFunc(message map[string]string) error {
 		message["Safety_ST"], message["Safety_ET"],
 		message["ACW"], message["GRT"],
 		message["IRT"], message["LCT"]
-	//log.Println(len(SafetySt))
-	if len(Result) == 0 || len(SN) == 0 || len(SafetySt) == 0 || len(SafetyEt) == 0 || len(ACW) == 0 || len(GRT) == 0 || len(IRT) == 0 || len(LCT) != 0 {
-		return errors.New("接收到的参数长度为0，请检查安规设备传递的参数")
-	}
-
+	//if len(Result) == 0 || len(SN) == 0 || len(SafetySt) == 0 || len(SafetyEt) == 0 || len(ACW) == 0 || len(GRT) == 0 || len(IRT) == 0 || len(LCT) != 0 {
+	//	//log.Printf("接收到的参数长度为0，请检查安规设备传递的参数")
+	//	return errors.New("接收到的参数长度为0，请检查安规设备传递的参数")
+	//}
 	//将时间字符串序列化为标准时间格式
 	StartTime, err := time.ParseInLocation("2006-01-02 15:04:05", SafetySt, time.Local)
 	if err != nil {

@@ -1,22 +1,24 @@
 package TestBench
 
 import (
+	"errors"
 	"strings"
 )
 
-func Convert(str string) *map[string]string {
+func Convert(str string) (*map[string]string, error) {
 	//将接受到的字符串转化为MAP
 	messages := strings.Split(str, "--")
 	var ret map[string]string
 	ret = make(map[string]string)
 	for _, paraMess := range messages {
-		//log.Println(paraId,paraMess)
 		if paraMess == "" {
 		} else {
 			message := strings.SplitN(paraMess, ":", 2)
-			//log.Print(message[1])
+			if len(message[0]) == 0 || len(message[1]) == 0 {
+				return nil, errors.New("主机传递的字符串包含空信息，请检查主机传递的信息！！！" + str)
+			}
 			ret[message[0]] = message[1]
 		}
 	}
-	return &ret
+	return &ret, nil
 }

@@ -55,6 +55,6 @@ func CptbTestFunc(message map[string]string) error {
 		return errors.New("安规测试台执行数据库写入错误！")
 	}
 
-	log.Println("=========================综合性能检测台数据操作完成===============================")
+	log.Println("=========================综合性能检测台数据写入操作完成===============================")
 	return nil
 }
