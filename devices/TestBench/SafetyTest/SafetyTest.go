@@ -1,4 +1,4 @@
-package SafetyTest
+package TestBench
 
 import (
 	"errors"
@@ -9,6 +9,7 @@ import (
 )
 
 func SafetyTestFunc(message map[string]string) error {
+	log.Println("=========================正在写入安规检测报告===============================")
 	//创建连接
 	conn := SQL.ConnSQL()
 	defer conn.Close()
@@ -18,10 +19,6 @@ func SafetyTestFunc(message map[string]string) error {
 		message["Safety_ST"], message["Safety_ET"],
 		message["ACW"], message["GRT"],
 		message["IRT"], message["LCT"]
-	//if len(Result) == 0 || len(SN) == 0 || len(SafetySt) == 0 || len(SafetyEt) == 0 || len(ACW) == 0 || len(GRT) == 0 || len(IRT) == 0 || len(LCT) != 0 {
-	//	//log.Printf("接收到的参数长度为0，请检查安规设备传递的参数")
-	//	return errors.New("接收到的参数长度为0，请检查安规设备传递的参数")
-	//}
 	//将时间字符串序列化为标准时间格式
 	StartTime, err := time.ParseInLocation("2006-01-02 15:04:05", SafetySt, time.Local)
 	if err != nil {
@@ -58,42 +55,40 @@ func SafetyTestFunc(message map[string]string) error {
 	if len(orderNumber) == 0 || len(productCode) == 0 || stmt == nil {
 		return errors.New("从和数据库查询的订单信息为空，请检查数据库是否已录入该订单！")
 	}
-	res, err := stmt.Exec(orderNumber, productCode, "P0110", SN, StartTime, EndTime, SN, Result)
+	_, err = stmt.Exec(orderNumber, productCode, "P0110", SN, StartTime, EndTime, SN, Result)
 	if err != nil {
 		return errors.New("安规测试台执行数据库写入错误！")
 	}
-	log.Println(res)
-	log.Println("=========================操作完成===============================")
 	//将检测数据进行语义分割
-	ACW_V := strings.Split(strings.Split(ACW, ";")[0], ",")[1]
-	ACW_C_min := strings.Split(strings.Split(ACW, ";")[1], ",")[1]
-	ACW_C_max := strings.Split(strings.Split(ACW, ";")[1], ",")[3]
-	ACW_C_val := strings.Split(strings.Split(ACW, ";")[1], ",")[2]
-	IRT_V := strings.Split(strings.Split(IRT, ";")[0], ",")[1]
-	IRT_R_min := strings.Split(strings.Split(IRT, ";")[1], ",")[1]
-	IRT_R_max := strings.Split(strings.Split(IRT, ";")[1], ",")[3]
-	IRT_R_val := strings.Split(strings.Split(IRT, ";")[1], ",")[2]
-	GRT_C := strings.Split(strings.Split(GRT, ";")[0], ",")[1]
-	GRT_R_min := strings.Split(strings.Split(GRT, ";")[1], ",")[1]
-	GRT_R_max := strings.Split(strings.Split(GRT, ";")[1], ",")[3]
-	GRT_R_val := strings.Split(strings.Split(GRT, ";")[1], ",")[2]
-	LCT_V := strings.Split(strings.Split(LCT, ";")[0], ",")[1]
-	LCT_C_min := strings.Split(strings.Split(LCT, ";")[1], ",")[1]
-	LCT_C_max := strings.Split(strings.Split(LCT, ";")[1], ",")[3]
-	LCT_C_val := strings.Split(strings.Split(LCT, ";")[1], ",")[2]
+	AcwV := strings.Split(strings.Split(ACW, ";")[0], ",")[1]
+	AcwCMin := strings.Split(strings.Split(ACW, ";")[1], ",")[1]
+	AcwCMax := strings.Split(strings.Split(ACW, ";")[1], ",")[3]
+	AcwCVal := strings.Split(strings.Split(ACW, ";")[1], ",")[2]
+	IrtV := strings.Split(strings.Split(IRT, ";")[0], ",")[1]
+	IrtRMin := strings.Split(strings.Split(IRT, ";")[1], ",")[1]
+	IrtRMax := strings.Split(strings.Split(IRT, ";")[1], ",")[3]
+	IrtRVal := strings.Split(strings.Split(IRT, ";")[1], ",")[2]
+	GrtC := strings.Split(strings.Split(GRT, ";")[0], ",")[1]
+	GrtRMin := strings.Split(strings.Split(GRT, ";")[1], ",")[1]
+	GrtRMax := strings.Split(strings.Split(GRT, ";")[1], ",")[3]
+	GrtRVal := strings.Split(strings.Split(GRT, ";")[1], ",")[2]
+	LctV := strings.Split(strings.Split(LCT, ";")[0], ",")[1]
+	LctCMin := strings.Split(strings.Split(LCT, ";")[1], ",")[1]
+	LctCMax := strings.Split(strings.Split(LCT, ";")[1], ",")[3]
+	LctCVal := strings.Split(strings.Split(LCT, ";")[1], ",")[2]
 
 	//将分割后的数据插入数据库
 	stmt, err = conn.Prepare("INSERT INTO dbo.安规检测行表 (订单编号,工序代码,设备序列ID,测试项目名称,子项目名称,测试参数一,测试参数一标准,测试参数二,合格下限,检测数据,合格上限,测试结果) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)")
 	if stmt == nil {
-		return errors.New("Stmt Prepare 为空，请检查数据库")
+		return errors.New("stmt Prepare 为空，请检查数据库")
 	}
-	res, err = stmt.Exec(orderNumber, "P0110", SN, "安规检测", "交流耐压", "电流", ACW_V, "电压", ACW_C_min, ACW_C_val, ACW_C_max, Result)
+	_, err = stmt.Exec(orderNumber, "P0110", SN, "安规检测", "交流耐压", "电流", AcwV, "电压", AcwCMin, AcwCVal, AcwCMax, Result)
 
-	res, err = stmt.Exec(orderNumber, "P0110", SN, "安规检测", "绝缘电阻", "电阻", IRT_V, "电压", IRT_R_min, IRT_R_val, IRT_R_max, Result)
+	_, err = stmt.Exec(orderNumber, "P0110", SN, "安规检测", "绝缘电阻", "电阻", IrtV, "电压", IrtRMin, IrtRVal, IrtRMax, Result)
 
-	res, err = stmt.Exec(orderNumber, "P0110", SN, "安规检测", "接地电阻", "电阻", GRT_C, "电压", GRT_R_min, GRT_R_val, GRT_R_max, Result)
+	_, err = stmt.Exec(orderNumber, "P0110", SN, "安规检测", "接地电阻", "电阻", GrtC, "电压", GrtRMin, GrtRVal, GrtRMax, Result)
 
-	res, err = stmt.Exec(orderNumber, "P0110", SN, "安规检测", "泄漏电流", "电流", LCT_V, "电压", LCT_C_min, LCT_C_val, LCT_C_max, Result)
-
+	_, err = stmt.Exec(orderNumber, "P0110", SN, "安规检测", "泄漏电流", "电流", LctV, "电压", LctCMin, LctCVal, LctCMax, Result)
+	log.Println("========================安规检测报告写入操作完成==============================")
 	return nil
 }

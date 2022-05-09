@@ -1,4 +1,4 @@
-package CPTBTestBench
+package TestBench
 
 import (
 	"errors"
@@ -8,9 +8,10 @@ import (
 )
 
 func CptbTestFunc(message map[string]string) error {
+	log.Println("=========================正在写入综合性能检测报告===============================")
 	conn := SQL.ConnSQL()
 	defer conn.Close()
-	SN, Result, CptbSt, CptbEt, CPTB_ITEM_NM :=
+	SN, Result, CptbSt, CptbEt, CptbItemNm :=
 		message["SN"], message["Result"],
 		message["CPTB_ST"], message["CPTB_ET"],
 		message["CPTB_ITEM_NM"]
@@ -34,8 +35,7 @@ func CptbTestFunc(message map[string]string) error {
 	rows, err := conn.Query(`select 订单编号,产品型号,生产线别,产品代码 from dbo.设备ID生成情况 where 设备序列号 = ?`, SN)
 	if err != nil {
 		log.Println("Query failed:", err.Error())
-		//return errors.New("Query failed错误")
-		return err
+		return errors.New("从设备ID生成情况拉取相关信息失败")
 	}
 	for rows.Next() {
 		err := rows.Scan(&orderNumber, &productNo, &productionLine, &productCode)
@@ -50,11 +50,11 @@ func CptbTestFunc(message map[string]string) error {
 	if len(orderNumber) == 0 || len(productCode) == 0 || stmt == nil {
 		return errors.New("从和数据库查询的订单信息为空，请检查数据库是否已录入该订单！")
 	}
-	_, err = stmt.Exec(orderNumber, productCode, "P0110", SN, StartTime, EndTime, CPTB_ITEM_NM, Result)
+	_, err = stmt.Exec(orderNumber, productCode, "P0110", SN, StartTime, EndTime, CptbItemNm, Result)
 	if err != nil {
 		return errors.New("安规测试台执行数据库写入错误！")
 	}
 
-	log.Println("=========================综合性能检测台数据写入操作完成===============================")
+	log.Println("=========================综合性能检测台数据写入操作完成=============================")
 	return nil
 }

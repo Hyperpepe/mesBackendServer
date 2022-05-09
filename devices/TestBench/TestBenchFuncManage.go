@@ -2,13 +2,13 @@ package TestBench
 
 import (
 	"errors"
-	"first/devices/TestBench/CPTBTestBench"
-	"first/devices/TestBench/SafetyTest"
+	CptbTest "first/devices/TestBench/CPTBTestBench"
+	SafeTest "first/devices/TestBench/SafetyTest"
 	"log"
 	"strings"
 )
 
-func TestBenchFuncManage(TcpMessages string) (string, error) {
+func FuncManage(TcpMessages string) (string, error) {
 	if (strings.Count(TcpMessages, "#")) != 2 {
 		log.Printf("接收到的字符串 # 验证错误！ 请检查发送格式是否正确")
 		return "fail", errors.New("接收到的字符串验证符验证错误（#）")
@@ -22,14 +22,14 @@ func TestBenchFuncManage(TcpMessages string) (string, error) {
 	}
 	switch (*messMap)["ItemName"] {
 	case "Safety_test":
-		err := SafetyTest.SafetyTestFunc(*messMap)
+		err := SafeTest.SafetyTestFunc(*messMap)
 		if err != nil {
 			log.Print(err)
 			return "fail", errors.New("调用方法SafetyTest失败！")
 		}
 		return "ok", nil
 	case "CPTB_test_bench":
-		err := CPTBTestBench.CptbTestFunc(*messMap)
+		err := CptbTest.CptbTestFunc(*messMap)
 		if err != nil {
 			log.Print(err)
 			return "fail", errors.New("调用方法CPTBTestBench失败！")

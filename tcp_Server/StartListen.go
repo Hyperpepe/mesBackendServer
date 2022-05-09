@@ -7,26 +7,9 @@ import (
 	"net"
 )
 
-//根据ip地址监听相关信息
+// StartListen 根据ip地址监听相关信息
 func StartListen(ipAddr string) {
 	log.Println("Start listening Tcp/Ip from " + ipAddr + "  ...")
-	// 创建 listener
-	//go func() {
-	//	listener, err := net.Listen("tcp", ipAddr)
-	//	if err != nil {
-	//		fmt.Println("Error listening", err.Error())
-	//	}
-	//	// 监听并接受来自客户端的连接
-	//	for {
-	//		conn, err := listener.Accept()
-	//		if err != nil {
-	//			fmt.Println("Error accepting", err.Error())
-	//		}
-	//		message := doServerStuff(conn)
-	//		fmt.Println(message)
-	//	}
-	//}()
-
 	listener, err := net.Listen("tcp", ipAddr)
 	if err != nil {
 		fmt.Println("Error listening", err.Error())
@@ -34,17 +17,20 @@ func StartListen(ipAddr string) {
 	// 监听并接受来自客户端的连接
 	for {
 		conn, err := listener.Accept()
-		defer conn.Close()
 		if err != nil {
 			log.Println("Error accepting", err.Error())
 		}
 		message := doServerStuff(conn)
 		//log.Println(message)
-		ret := TestBench.TestBenchFuncManage(message)
+		ret, err := TestBench.FuncManage(message)
+		if err != nil {
+			log.Print("调用程序错误，请检查错误信息->: s", err)
+		}
 		_, err = conn.Write([]byte(ret))
 		if err != nil {
 			log.Printf("写入返回值时的连接错误！")
 		}
+		conn.Close()
 	}
 }
 
