@@ -8,7 +8,8 @@ import (
 )
 
 // StartListen 根据ip地址监听相关信息
-func StartListen(ipAddr string) {
+func StartListen(conf *map[string]string) {
+	ipAddr := (*conf)["TCP_ListenAddr"]
 	log.Println("Start listening Tcp/Ip from " + ipAddr + "  ...")
 	listener, err := net.Listen("tcp", ipAddr)
 	if err != nil {
@@ -21,7 +22,6 @@ func StartListen(ipAddr string) {
 			log.Println("Error accepting", err.Error())
 		}
 		message := doServerStuff(conn)
-		//log.Println(message)
 		ret, err := TestBench.FuncManage(message)
 		if err != nil {
 			log.Print("调用程序错误，请检查错误信息->: s", err)

@@ -1,6 +1,7 @@
 package EsopScreen
 
 import (
+	"errors"
 	"first/ReadConfig"
 	"first/SQL"
 	Client "first/tcp_Client"
@@ -14,7 +15,7 @@ type screen struct {
 	Image string
 }
 
-func SendMessageToAll() bool {
+func SendMessageToAll() error {
 	//声明esop的IP和data
 	var rowsData []screen
 	conf := ReadConfig.ReadConfig()
@@ -25,7 +26,7 @@ func SendMessageToAll() bool {
 	stmt, err := conn.Prepare(`select 设备网络IP,显示图片 from dbo.esop表单`)
 	if err != nil {
 		log.Println("Sql Prepare failed:", err.Error())
-		return false
+		return errors.New("从数据库查询失败")
 	}
 	defer stmt.Close()
 
@@ -33,7 +34,7 @@ func SendMessageToAll() bool {
 	rows, err := stmt.Query()
 	if err != nil {
 		log.Println("Query failed:", err.Error())
-		return false
+		return errors.New("从数据库查询失败")
 	}
 	//将数据读取到实体中
 	for rows.Next() {
@@ -43,23 +44,27 @@ func SendMessageToAll() bool {
 	}
 	//读取不到信息则返回空
 	if rowsData == nil {
-		log.Println("Can not get Data,Please Check DataSources!!!")
-		return false
+		log.Println("Can not get Data,Please Check SqlServer!!!")
+		return errors.New("数据库返回消息长度为0")
 	}
 	//读取到信息则通过tcp传递信息
 	esopPort := (*conf)["esop_port"]
+	ftpAddr := (*conf)["ftpAddr"]
 	var wg sync.WaitGroup
 	for _, row := range rowsData {
 		ip := row.Ip
 		image := row.Image
-		wg.Add(1)
-		go sendToEsop(ip+esopPort, "Pic:"+"ftp://ftp@192.168.2.46/home/ftp/mes/"+image, &wg)
+		go func() {
+			wg.Add(1)
+			defer wg.Done()
+			log.Println(ip + esopPort + " " + "Pic:" + ftpAddr + image)
+			//_, err := Client.SendMessage(ip+esopPort, "Pic:"+"ftp://ftp@192.168.80.40/home/ftp/mes/"+image)
+			_, err := Client.SendMessage(ip+esopPort, "Pic:"+ftpAddr+image)
+			if err != nil {
+				log.Print("发送图片出现错误，请查看相关错误代码！")
+			}
+		}()
 	}
 	wg.Wait()
-	return true
-}
-func sendToEsop(Ip string, Message string, wg *sync.WaitGroup) {
-	log.Println(Ip + " " + Message)
-	Client.SendMessage(Ip, Message)
-	defer wg.Done()
+	return nil
 }

@@ -2,6 +2,7 @@ package EsopScreen
 
 import (
 	"database/sql"
+	"errors"
 	"first/ReadConfig"
 	"first/SQL"
 	Client "first/tcp_Client"
@@ -11,7 +12,7 @@ import (
 	"sync"
 )
 
-func CheckStatus() bool {
+func CheckStatus() error {
 	conn := SQL.ConnSQL()
 	conf := ReadConfig.ReadConfig()
 	defer conn.Close()
@@ -19,7 +20,7 @@ func CheckStatus() bool {
 	stmt, err := conn.Prepare(`select 设备网络IP from dbo.esop表单`)
 	if err != nil {
 		fmt.Println("Prepare failed:", err.Error())
-		return false
+		return errors.New("链接数据库失败，请检查与数据库的链接是否可靠")
 	}
 	defer stmt.Close()
 
@@ -27,7 +28,7 @@ func CheckStatus() bool {
 	rows, err := stmt.Query()
 	if err != nil {
 		fmt.Println("Query failed:", err.Error())
-		return false
+		return errors.New("从数据库查询表失败")
 	}
 	//将数据读取到实体中
 	esopPort := (*conf)["esop_port"]
@@ -42,7 +43,7 @@ func CheckStatus() bool {
 		//fmt.Println("ip:", tmp, " status:")
 	}
 	wg.Wait()
-	return true
+	return nil
 }
 
 //对每一个Ip进行访问并将结果返回到数据库中
@@ -50,7 +51,7 @@ func checkStatus(Ip string, port string, Status string, conn *sql.DB, wg *sync.W
 	//超线程完成操作
 	defer wg.Done()
 	//对Ip进行访问并获得访问结果
-	ret := Client.SendMessage(Ip+port, Status)
+	ret, _ := Client.SendMessage(Ip+port, Status)
 	log.Println(ret)
 	if strings.Contains(ret, "online") {
 		_, err := conn.Exec("update dbo.esop表单 set 状态=1 where 设备网络IP='" + Ip + "'")

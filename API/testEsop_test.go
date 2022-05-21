@@ -7,7 +7,7 @@ import (
 )
 
 //测试程序
-func Test3(t *testing.T) {
+func TestEsop(t *testing.T) {
 	//startApiListen()
 	//Server.StartListen("192.168.2.25:10000")
 	//log.Println("------------------------------------------------------------")

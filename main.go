@@ -7,10 +7,8 @@ import (
 )
 
 func main() {
+	//服务器开启
 	conf := ReadConfig.ReadConfig()
-	ApiIp := (*conf)["API_ListenAddr"]
-	TcpIp := (*conf)["TCP_ListenAddr"]
-	API.StartApiListen(ApiIp)
-	Server.StartListen(TcpIp)
-	//log.Println("------------------------------------------------------------")
+	API.StartApiListen(conf)
+	Server.StartListen(conf)
 }
