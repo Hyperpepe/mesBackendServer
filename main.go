@@ -1,14 +1,14 @@
 package main
 
 import (
-	"first/API"
-	"first/ReadConfig"
-	Server "first/tcp_Server"
+	"first/httpServer"
+	"first/readConfig"
+	Server "first/tcpServer"
 )
 
 func main() {
 	//服务器开启
-	conf := ReadConfig.ReadConfig()
-	API.StartApiListen(conf)
+	conf := readConfig.ReadConfig()
+	httpServer.StartApiListen(conf)
 	Server.StartListen(conf)
 }

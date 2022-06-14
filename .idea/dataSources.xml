@@ -17,5 +17,12 @@
       <jdbc-url>jdbc:sqlserver://192.168.80.40:1433;database=AiRuiKe</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
+    <data-source source="LOCAL" name="AiRuiKeTest" uuid="c46c66ba-37f3-47fd-8aba-4a62394a1f28">
+      <driver-ref>sqlserver.ms</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.microsoft.sqlserver.jdbc.SQLServerDriver</jdbc-driver>
+      <jdbc-url>jdbc:sqlserver://192.168.80.40;database=test</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
   </component>
 </project>

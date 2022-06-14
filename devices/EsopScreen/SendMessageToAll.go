@@ -2,9 +2,9 @@ package EsopScreen
 
 import (
 	"errors"
-	"first/ReadConfig"
 	"first/SQL"
-	Client "first/tcp_Client"
+	"first/readConfig"
+	Client "first/tcpClient"
 	"log"
 	"sync"
 )
@@ -15,10 +15,11 @@ type screen struct {
 	Image string
 }
 
+//
 func SendMessageToAll() error {
 	//声明esop的IP和data
 	var rowsData []screen
-	conf := ReadConfig.ReadConfig()
+	conf := readConfig.ReadConfig()
 	//声明数据库连接字符串
 	conn := SQL.ConnSQL()
 	defer conn.Close()
@@ -57,6 +58,7 @@ func SendMessageToAll() error {
 		go func() {
 			wg.Add(1)
 			defer wg.Done()
+			//传递的信息为IP + TCP地址
 			ret, err := Client.SendMessage(ip+esopPort, "Pic:"+ftpAddr+image)
 			if err != nil {
 				log.Print(err)

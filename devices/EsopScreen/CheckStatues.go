@@ -3,18 +3,22 @@ package EsopScreen
 import (
 	"database/sql"
 	"errors"
-	"first/ReadConfig"
 	"first/SQL"
-	Client "first/tcp_Client"
+	"first/readConfig"
+	Client "first/tcpClient"
 	"fmt"
 	"log"
 	"strings"
 	"sync"
 )
 
+// CheckStatus 检查ESOP的状态
+// 先查询数据库中的ESOP的地址
+// 对数据库中展现的地址发送tcp指令
+// 能够回复就说明设备在线
 func CheckStatus() error {
 	conn := SQL.ConnSQL()
-	conf := ReadConfig.ReadConfig()
+	conf := readConfig.ReadConfig()
 	defer conn.Close()
 	//编写查询语句
 	stmt, err := conn.Prepare(`select 设备网络IP from dbo.esop表单`)

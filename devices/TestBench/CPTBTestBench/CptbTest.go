@@ -11,7 +11,7 @@ func CptbTestFunc(message map[string]string) error {
 	log.Println("=========================正在写入综合性能检测报告===============================")
 	conn := SQL.ConnSQL()
 	defer conn.Close()
-	SN, Result, CptbSt, CptbEt, CptbItemNm :=
+	SN, Result, CptbSt, CptbEt, _ :=
 		message["SN"], message["Result"],
 		message["CPTB_ST"], message["CPTB_ET"],
 		message["CPTB_ITEM_NM"]
@@ -50,7 +50,7 @@ func CptbTestFunc(message map[string]string) error {
 	if len(orderNumber) == 0 || len(productCode) == 0 || stmt == nil {
 		return errors.New("从和数据库查询的订单信息为空，请检查数据库是否已录入该订单！")
 	}
-	_, err = stmt.Exec(orderNumber, productCode, "P0110", SN, StartTime, EndTime, CptbItemNm, Result)
+	_, err = stmt.Exec(orderNumber, productCode, "P0110", SN, StartTime, EndTime, SN, Result)
 	if err != nil {
 		return errors.New("安规测试台执行数据库写入错误！")
 	}

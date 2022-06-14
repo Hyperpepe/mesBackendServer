@@ -1,4 +1,4 @@
-package API
+package httpServer
 
 import (
 	"first/devices/EsopScreen"
@@ -26,7 +26,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 	getArgs := r.URL.Query()
 	//参数调用请求,有参数则解参数并调用相关的方法，无参数则进入下一个分支调用相应的动作
 	if len(getArgs) != 0 {
-		log.Print("Receive API Args: ")
+		log.Print("Receive httpServer Args: ")
 		log.Println(getArgs)
 		//解析参数并调用相应的方法
 		w.Header().Set("Content-Type", "text/plain; charset=utf-8") // normal header

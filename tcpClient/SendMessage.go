@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+// SendMessage 向目标IP地址传递信息并接收返回值
 func SendMessage(ipAddr, Message string) (string, error) {
 	//设置超时时间为：2s
 	connTimeout := 2 * time.Second

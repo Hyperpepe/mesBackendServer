@@ -2,14 +2,14 @@ package SQL
 
 import (
 	"database/sql"
-	"first/ReadConfig"
+	"first/readConfig"
 	"fmt"
 	_ "github.com/denisenkom/go-mssqldb"
 	"log"
 )
 
 func ConnSQL() *sql.DB {
-	conf := ReadConfig.ReadConfig()
+	conf := readConfig.ReadConfig()
 	server, port, database, user, password := (*conf)["sql_server"],
 		(*conf)["sql_port"],
 		(*conf)["sql_database"],

@@ -7,21 +7,29 @@ import (
 	"time"
 )
 
-//#--SN:0123456789011
-//--ItemName:Water_tightness_test
-//--Result:OK
-//--Water_tightness_ST:2022-06-13 15:49:06
-//--Water_tightness_ET:2022-06-13 15:49:37
-//--ALM:0,0.015,10#
+// WaterTightnessTestFunc
+//--SN:0123456789011
+//--ItemName:Air_tightness_test
+//--Air_tightness_ST:2022-06-15 09:54:35
+//--Air_tightness_ET:2022-06-15 09:56:02
+//--Bath_Result:OK
+//--Bath_ALM:0,-0000.,10
+//--Bath_PR:+03.3
+//--Heat_Result:OK
+//--Heat_ALM:0,+0000.,10
+//--Heat_PR:+03.9
 func WaterTightnessTestFunc(message map[string]string) error {
 	log.Println("=========================正在写入水路气密性检测报告===============================")
 	conn := SQL.ConnSQL()
 	defer conn.Close()
-	SN, Result, St, Et, ItemNm :=
-		message["SN"], message["Result"],
+	SN, BathResult, HeatResult, St, Et, _, _, _, _ :=
+		message["SN"], message["Bath_Result"], message["Heat_Result"],
 		message["Water_tightness_ST"], message["Water_tightness_ET"],
-		message["ALM"]
-
+		message["Bath_ALM"], message["Heat_ALM"], message["Bath_PR"], message["Heat_PR"]
+	Result := "fail"
+	if BathResult == "ok" && HeatResult == "ok" {
+		Result = "ok"
+	}
 	//将时间字符串序列化为标准时间格式
 	StartTime, err := time.ParseInLocation("2006-01-02 15:04:05", St, time.Local)
 	if err != nil {
@@ -56,7 +64,7 @@ func WaterTightnessTestFunc(message map[string]string) error {
 	if len(orderNumber) == 0 || len(productCode) == 0 || stmt == nil {
 		return errors.New("从和数据库查询的订单信息为空，请检查数据库是否已录入该订单！")
 	}
-	_, err = stmt.Exec(orderNumber, productCode, "P0110", SN, StartTime, EndTime, ItemNm, Result)
+	_, err = stmt.Exec(orderNumber, productCode, "P0110", SN, StartTime, EndTime, SN, Result)
 	if err != nil {
 		log.Print(err)
 		return errors.New("水路气密性检测执行数据库写入错误！")

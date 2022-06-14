@@ -1,4 +1,4 @@
-package ReadConfig
+package readConfig
 
 import (
 	"github.com/astaxie/beego/config"
@@ -7,8 +7,8 @@ import (
 
 // ReadConfig 用于将config中配置信息解析成MAP格式
 func ReadConfig() *map[string]string {
-	conf, err := config.NewConfig("ini", "C:\\Users\\tss05\\goProject\\first\\config.conf")
-	//conf, err := config.NewConfig("ini", "/root/mes_app/config.conf")
+	//conf, err := config.NewConfig("ini", "C:\\Users\\tss05\\goProject\\first\\config.conf")
+	conf, err := config.NewConfig("ini", "config.conf")
 	if err != nil {
 		log.Print("config read error!")
 		log.Println(err)

@@ -5,6 +5,7 @@ import (
 	"strings"
 )
 
+// Convert 将TCP传递来的STRING转换为MAP对
 func Convert(str string) (*map[string]string, error) {
 	//将接受到的字符串转化为MAP
 	messages := strings.Split(str, "--")

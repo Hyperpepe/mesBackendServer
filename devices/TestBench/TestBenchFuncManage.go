@@ -11,7 +11,9 @@ import (
 	"strings"
 )
 
+// FuncManage 用来处理TCP传递过来的信息所需要调用的函数
 func FuncManage(conn net.Conn) error {
+	//将建立的连接导入
 	TcpMessages := getMessages(conn)
 	defer conn.Close()
 	//验证字符串的头和尾
@@ -35,7 +37,7 @@ func FuncManage(conn net.Conn) error {
 		}
 		return errors.New("转换字符串格式失败，请查看日志！")
 	}
-	//function调用过程
+	//函数的调用过程
 	switch (*messMap)["ItemName"] {
 	case "Safety_test":
 		err := SafeTest.SafetyTestFunc(*messMap)
@@ -97,12 +99,14 @@ func FuncManage(conn net.Conn) error {
 			log.Printf("写入返回值时的连接错误！")
 		}
 		return nil
+
 	default:
 		log.Printf("接收到的字符串无法解析！")
 		return errors.New("找不到需要调用的方法！")
 	}
 }
 
+//用于将TCP的bit类型转换为STRING类型
 func getMessages(conn net.Conn) (message string) {
 	for {
 		buf := make([]byte, 512)

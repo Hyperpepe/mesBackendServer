@@ -7,17 +7,11 @@ import (
 	"time"
 )
 
-//#--SN:0123456789011
-//--ItemName:Air_tightness_test
-//--Result:OK
-//--Air_tightness_ST:2022-06-13 15:49:06
-//--Air_tightness_ET:2022-06-13 15:49:37
-//--ALM:0,0.015,10#
 func AirTightTestFunc(message map[string]string) error {
 	log.Println("=========================正在写入气密性检测报告===============================")
 	conn := SQL.ConnSQL()
 	defer conn.Close()
-	SN, Result, St, Et, ItemNm :=
+	SN, Result, St, Et, _ :=
 		message["SN"], message["Result"],
 		message["Air_tightness_ST"], message["Air_tightness_ET"],
 		message["ALM"]
@@ -57,7 +51,7 @@ func AirTightTestFunc(message map[string]string) error {
 		return errors.New("从和数据库查询的订单信息为空，请检查数据库是否已录入该订单！")
 	}
 	log.Print(SN)
-	_, err = stmt.Exec(orderNumber, productCode, "P0110", SN, StartTime, EndTime, ItemNm, Result)
+	_, err = stmt.Exec(orderNumber, productCode, "P0110", SN, StartTime, EndTime, SN, Result)
 	if err != nil {
 		log.Print(err)
 		return errors.New("气密性检测执行数据库写入错误！")

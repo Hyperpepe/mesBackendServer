@@ -2,13 +2,13 @@ package PdaReturnSN
 
 import (
 	"errors"
-	"first/ReadConfig"
-	Client "first/tcp_Client"
+	"first/readConfig"
+	Client "first/tcpClient"
 	"log"
 )
 
 func ReturnSN(sn string) error {
-	conf := ReadConfig.ReadConfig()
+	conf := readConfig.ReadConfig()
 	ip := (*conf)["ID_Computer"]
 	formatSn := "#--" + sn + "#"
 	log.Print("IP:" + ip)
