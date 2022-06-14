@@ -57,11 +57,13 @@ func SendMessageToAll() error {
 		go func() {
 			wg.Add(1)
 			defer wg.Done()
-			log.Println(ip + esopPort + " " + "Pic:" + ftpAddr + image)
-			//_, err := Client.SendMessage(ip+esopPort, "Pic:"+"ftp://ftp@192.168.80.40/home/ftp/mes/"+image)
-			_, err := Client.SendMessage(ip+esopPort, "Pic:"+ftpAddr+image)
+			ret, err := Client.SendMessage(ip+esopPort, "Pic:"+ftpAddr+image)
 			if err != nil {
-				log.Print("发送图片出现错误，请查看相关错误代码！")
+				log.Print(err)
+				log.Print(ip + " : 发送图片出现错误！")
+			} else {
+				//log.Println(ip + esopPort + " " + "Pic:" + ftpAddr + image)
+				log.Print(ip + " : 图片发送成功！终端返回参数为: " + ret)
 			}
 		}()
 	}

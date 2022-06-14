@@ -31,7 +31,6 @@ func SendMessage(ipAddr, Message string) (string, error) {
 	if err != nil {
 		return "", errors.New("获取返回值超时，请检查相关联的设备:" + ipAddr)
 	}
-	log.Print(ipAddr + " : " + string(buf[:n]))
 	//发送图片正常时返回值为ok!
 	return string(buf[:n]), nil
 }

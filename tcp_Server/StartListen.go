@@ -21,28 +21,14 @@ func StartListen(conf *map[string]string) {
 		if err != nil {
 			log.Println("Error accepting", err.Error())
 		}
-		message := doServerStuff(conn)
-		ret, err := TestBench.FuncManage(message)
-		if err != nil {
-			log.Print("调用程序错误，请检查错误信息->: s", err)
-		}
-		_, err = conn.Write([]byte(ret))
-		if err != nil {
-			log.Printf("写入返回值时的连接错误！")
-		}
-		conn.Close()
-	}
-}
-
-func doServerStuff(conn net.Conn) (message string) {
-	for {
-		buf := make([]byte, 512)
-		lenConn, err := conn.Read(buf)
-		if err != nil {
-			log.Println("Error reading", err.Error())
-			return "" //终止程序
-		}
-		log.Printf("Received data: %v", string(buf[:lenConn]))
-		return string(buf[:lenConn])
+		go func() {
+			err := TestBench.FuncManage(conn)
+			if err != nil {
+				log.Print("调用程序错误，请检查错误信息->: s", err)
+			}
+			if err != nil {
+				log.Printf("写入返回值时的连接错误！")
+			}
+		}()
 	}
 }
